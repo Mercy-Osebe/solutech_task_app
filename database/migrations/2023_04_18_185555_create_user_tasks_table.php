@@ -15,7 +15,6 @@ class CreateUserTasksTable extends Migration
     {
         Schema::create('user_tasks', function (Blueprint $table) {
             $table->index(['user_id','task_id']);
-
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('task_id')->constrained()->onDelete('cascade');

@@ -15,7 +15,7 @@ class CreateStatusTable extends Migration
     {
         Schema::create('status', function (Blueprint $table) {
             $table->increments('id')->autoIncrement();
-            $table->string('name',100);
+            $table->string('name',100)->unique();
             $table->timestamps();
             $table->softDeletes();
         });
