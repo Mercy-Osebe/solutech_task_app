@@ -29,7 +29,9 @@ class TaskController extends Controller
     {
         //
         $request->validate([
-            name=>['required','min:6']
+           "name"=>['required','min:6'],
+           "description"=>['required','max:255'],
+           "status_id"=>['required']
 
         ]);
 
@@ -37,6 +39,12 @@ class TaskController extends Controller
         $task->name=$request->name;
         $task->description=$request->description;
         $task->status_id=$request->status_id;
+
+        $task->save();
+        return response([
+            'task'=>$task,
+            'message'=>'Task saved successfully'
+        ],201);
 
     }
 
@@ -49,6 +57,10 @@ class TaskController extends Controller
     public function show($id)
     {
         //
+        $task=Task::findOrFail($id);
+        return response([
+            "task"=>$task
+        ]);
     }
 
     /**
@@ -61,6 +73,26 @@ class TaskController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $task=Task::findOrFail($id);
+
+        $request->validate([
+            "name"=>['required','min:6'],
+            "description"=>['required','max:255'],
+            "status_id"=>['required']
+ 
+         ]);
+ 
+         $task->name=$request->name;
+         $task->description=$request->description;
+         $task->status_id=$request->status_id;
+ 
+         $task->update();
+         return response([
+             'task'=>$task,
+             'message'=>'Task updated successfully'
+         ],201);
+
+
     }
 
     /**
@@ -72,5 +104,10 @@ class TaskController extends Controller
     public function destroy($id)
     {
         //
+        $task=Task::findOrFail($id);
+        $task->delete();
+        return response([
+            "message"=>'task deleted successfully'
+        ],200);
     }
 }
