@@ -1,16 +1,15 @@
 <?php
- namespace app\enums;
+namespace App\Enums;
 
- class Status{
-    
+class TaskStatusesEnum{
+
     const OPEN = 'OPEN';
     const IN_PROGRESS = 'IN PROGRESS';
     const COMPLETED = 'COMPLETED';
     const ON_HOLD='ON HOLD';
     const CANCELLED='CANCELLED';
 
- }
-
+}
 
 
 ?>
