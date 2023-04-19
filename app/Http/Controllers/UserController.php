@@ -29,6 +29,7 @@ class UserController extends Controller
         $response=[
             'user'=>$user,
             'token'=>$token,
+            'message'=>"You have successfully signed in",
         ];
 
         return response($response,201);
@@ -36,7 +37,10 @@ class UserController extends Controller
     }
     public function logout(Request $request){
         Auth::user()->tokens()->delete();
-        return ['message'=>'logged out'];
+        return response(
+           [ 'message'=>'logged out session expired',]
+
+        );
 
     }
     public function login(Request $request){
@@ -48,7 +52,7 @@ class UserController extends Controller
  
         if (! $user || ! Hash::check($request->password, $user->password)) {
             return response([
-                'email' => ['The provided credentials are incorrect.'],401
+                'message' => ['The provided credentials are incorrect.'],401
             ]);
         }
      

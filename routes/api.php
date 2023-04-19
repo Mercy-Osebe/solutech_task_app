@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\StatusController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use GuzzleHttp\Middleware;
@@ -22,6 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 //Private routes
 Route::group(['middleware'=>['auth:sanctum']],function(){
+    Route::get('statuses',[StatusController::class,'index']);
     Route::get('tasks',[TaskController::class,'index']);
     Route::post('task/create',[TaskController::class,'store']);
     Route::get('task/{id}',[TaskController::class,'show']);
