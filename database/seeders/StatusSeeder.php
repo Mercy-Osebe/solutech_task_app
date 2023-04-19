@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\TaskStatusesEnum;
+use App\Models\Status;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,16 +16,10 @@ class StatusSeeder extends Seeder
      */
     public function run()
     {
+        // seed the status data via the status model
    
         foreach (
-            [
-               TaskStatusesEnum::OPEN,
-                TaskStatusesEnum::IN_PROGRESS,
-                TaskStatusesEnum::COMPLETED,
-                TaskStatusesEnum::ON_HOLD,
-                TaskStatusesEnum::CANCELLED,
-            ]
-            as $status
+                Status::$statuses as $status
         ) {
             DB::table('status')->insert([
                 'name' => $status,
@@ -32,5 +27,7 @@ class StatusSeeder extends Seeder
                 'updated_at' => now(),
             ]);
         }
+       
+        
      }
 }
