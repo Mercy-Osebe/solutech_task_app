@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Models\UserTask;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -16,7 +18,7 @@ class TaskController extends Controller
     {
         //
         $tasks = Task::all();
-        return response(['task' => $tasks], 200);
+        return response(['tasks' => $tasks], 200);
     }
 
     /**
@@ -31,17 +33,31 @@ class TaskController extends Controller
         $request->validate([
             "name" => ['required', 'min:6'],
             "description" => ['required', 'max:255'],
-            "status_id" => ['required']
+            "status_id" => ['required'],
+            "remarks" => ['required'],
+            "due_date"=>['required']
 
         ]);
+
+
 
         $task = new Task();
         $task->name = $request->name;
         $task->description = $request->description;
         $task->status_id = $request->status_id;
-
         $task->save();
+
+
         if ($task) {
+            $userTask = new UserTask();
+            $userTask->user_id = Auth::user()->id;
+            $userTask->task_id = $task->id;
+            $userTask->due_date = $request->due_date;
+            $userTask->end_time = $request->end_time;
+            $userTask->remarks = $request->remarks;
+            $userTask->status_id = $request->status_id;
+            $userTask->save();
+
             return response([
                 'task' => $task,
                 'message' => 'Task saved successfully'
@@ -83,7 +99,9 @@ class TaskController extends Controller
         $request->validate([
             "name" => ['required', 'min:6'],
             "description" => ['required', 'max:255'],
-            "status_id" => ['required']
+            "status_id" => ['required'],
+            "remarks" => ['required'],
+            "due_date"=>['required']
 
         ]);
 
@@ -92,6 +110,18 @@ class TaskController extends Controller
         $task->status_id = $request->status_id;
         $task->update();
         if ($task) {
+            $userTask = UserTask::where('task_id',$task->id)->get();
+            $userTask->user_id = Auth::user()->id;
+            $userTask->task_id = $task->id;
+            $userTask->due_date = $request->due_date;
+            $userTask->end_time = $request->end_time;
+            $userTask->remarks = $request->remarks;
+            $userTask->status_id = $request->status_id;
+            $userTask->update();
+
+
+
+
             return response([
                 'task' => $task,
                 'message' => 'Task updated successfully'

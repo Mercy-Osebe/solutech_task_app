@@ -38,7 +38,7 @@ class UserController extends Controller
     public function logout(Request $request){
         Auth::user()->tokens()->delete();
         return response(
-           [ 'message'=>'logged out session expired',]
+           [ 'message'=>'you are logged out :session expired',]
 
         );
 
