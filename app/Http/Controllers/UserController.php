@@ -48,12 +48,13 @@ class UserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['required', 'string', 'min:8'],
         ]);
+
         $user = User::where('email', $request->email)->first();
  
         if (! $user || ! Hash::check($request->password, $user->password)) {
             return response([
-                'message' => ['The provided credentials are incorrect.'],401
-            ]);
+                'message' => ['The provided credentials are incorrect.']
+            ],401);
         }
      
         $token= $user->createToken('logintoken')->plainTextToken;
