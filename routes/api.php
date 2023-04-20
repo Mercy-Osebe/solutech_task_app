@@ -34,3 +34,7 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
 // public routes
 Route::post('login',[UserController::class,'login']);
 Route::post('register',[UserController::class,'register']);
+
+Route::get('hello', function(Request $request) {
+    return "hello";
+});
