@@ -109,8 +109,9 @@ class TaskController extends Controller
         $task->description = $request->description;
         $task->status_id = $request->status_id;
         $task->update();
+
         if ($task) {
-            $userTask = UserTask::where('task_id',$task->id)->get();
+            $userTask = UserTask::where('task_id',$task->id)->first();
             $userTask->user_id = Auth::user()->id;
             $userTask->task_id = $task->id;
             $userTask->due_date = $request->due_date;
@@ -145,6 +146,7 @@ class TaskController extends Controller
         $task = Task::findOrFail($id);
         $task->delete();
         return response([
+            'tasks'=>Task::all(),
             "message" => 'task deleted successfully'
         ], 200);
     }
