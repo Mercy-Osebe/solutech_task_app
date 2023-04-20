@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Models\UserTask;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class TaskController extends Controller
 {
@@ -17,6 +18,9 @@ class TaskController extends Controller
     public function index()
     {
         //
+
+        // $user=Auth::user();
+        // $tasks = Task::where('user_id',$user->id)->get();
         $tasks = Task::all();
         return response(['tasks' => $tasks], 200);
     }
@@ -35,7 +39,7 @@ class TaskController extends Controller
             "description" => ['required', 'max:255'],
             "status_id" => ['required'],
             "remarks" => ['required'],
-            "due_date"=>['required']
+            "due_date" => ['required']
 
         ]);
 
@@ -101,7 +105,7 @@ class TaskController extends Controller
             "description" => ['required', 'max:255'],
             "status_id" => ['required'],
             "remarks" => ['required'],
-            "due_date"=>['required']
+            "due_date" => ['required']
 
         ]);
 
@@ -111,7 +115,7 @@ class TaskController extends Controller
         $task->update();
 
         if ($task) {
-            $userTask = UserTask::where('task_id',$task->id)->first();
+            $userTask = UserTask::where('task_id', $task->id)->firstOrFail();  
             $userTask->user_id = Auth::user()->id;
             $userTask->task_id = $task->id;
             $userTask->due_date = $request->due_date;
@@ -119,9 +123,6 @@ class TaskController extends Controller
             $userTask->remarks = $request->remarks;
             $userTask->status_id = $request->status_id;
             $userTask->update();
-
-
-
 
             return response([
                 'task' => $task,
@@ -146,7 +147,7 @@ class TaskController extends Controller
         $task = Task::findOrFail($id);
         $task->delete();
         return response([
-            'tasks'=>Task::all(),
+            'tasks' => Task::all(),
             "message" => 'task deleted successfully'
         ], 200);
     }
